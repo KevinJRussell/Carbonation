@@ -1,0 +1,1 @@
+const POSTS_PER_PAGE = 50;

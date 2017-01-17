@@ -12,6 +12,10 @@
   "content_scripts": [
     {
       "matches": ["*://*.endoftheinter.net/*"],
+      "js": ["Globals.js"]
+    },
+    {
+      "matches": ["*://*.endoftheinter.net/*"],
       "js": ["Util.js"]
     },
     {
