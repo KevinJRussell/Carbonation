@@ -11,15 +11,14 @@ function GetUrlParameter(key) {
 
 function GetParameter(url, key) {
     var decodeUrl = decodeURIComponent(url);
-    var queryStrings = decodeUrl.split('&');
     var value = null;
 
-    for (var i = 0; i < queryStrings.length; i++) {
-        var urlParameter = queryStrings[i].split('=');
+    decodeUrl.split('&').forEach(function (queryString) {
+            var urlParameter = queryString.split('=');
 
-        if (urlParameter[0] == key)
-            value = urlParameter[1];
-    }
+            if (urlParameter[0] == key)
+                value = urlParameter[1];
+    });
 
     return value;
 }

@@ -2,18 +2,13 @@ AddPostNumber();
 AddFilterMeButton();
 
 function AddPostNumber() {
-    var pageNumber = GetUrlParameter('page');
-    if (pageNumber == null)
-        pageNumber = 1;
+    var pageNumber = GetUrlParameter('page') || 1;
     var postFloor = (pageNumber - 1) * POSTS_PER_PAGE;
 
-    var posts = document.getElementsByClassName('message-container');
-
-    for (var i = 0; i < posts.length; i++) {
-        var postNumber = document.createTextNode(' | #' + (postFloor + i + 1));
-
-        posts[i].querySelector('.message-top').appendChild(postNumber);
-    }
+    document.querySelectorAll('.message-container').forEach(function (post, index) {
+        postNumber = document.createTextNode(` | #${(postFloor + index + 1)}`);
+        post.querySelector('.message-top').appendChild(postNumber);
+    });
 }
 
 function AddFilterMeButton() {
