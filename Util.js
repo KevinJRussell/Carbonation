@@ -1,6 +1,6 @@
 function GetUserId() {
-    var userbar = document.getElementsByClassName('userbar')[0];
-    var url = userbar.getElementsByTagName('a')[0].getAttribute('href');
+    var userbar = document.querySelector('.userbar');
+    var url = userbar.querySelector('a').getAttribute('href');
 
     return GetParameter(url.split('?')[1], 'user');
 }
