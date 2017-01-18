@@ -6,8 +6,21 @@
   "description": "Get Carbonated",
 
   "icons": {
-    "48": "Images/Icons/Carbonara-48.jpg"
+    "48": "Images/Icons/Carbonara-48.jpg",
+    "96": "Images/Icons/Carbonara-96.jpg"
   },
+
+  "browser_action": {
+    "default-icon": "Images/Icons/Carbonara-32.jpg",
+    "default-title": "Carbonation",
+    "default_popup": "Popup/Popup.html"
+  },
+
+  "options_ui": {
+    "page": "Options/Options.html"
+  },
+
+  "permissions": ["storage"],
 
   "content_scripts": [
     {
