@@ -11,8 +11,8 @@
   },
 
   "browser_action": {
-    "default-icon": "Images/Icons/Carbonara-32.jpg",
-    "default-title": "Carbonation",
+    "default_icon": "Images/Icons/Carbonara-32.jpg",
+    "default_title": "Carbonation",
     "default_popup": "Popup/Popup.html"
   },
 
