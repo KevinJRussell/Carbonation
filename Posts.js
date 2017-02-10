@@ -1,15 +1,6 @@
-AddPostNumber();
 AddFilterMeButton();
-
-function AddPostNumber() {
-    var pageNumber = GetUrlParameter('page') || 1;
-    var postFloor = (pageNumber - 1) * POSTS_PER_PAGE;
-
-    document.querySelectorAll('.message-container').forEach(function (post, index) {
-        postNumber = document.createTextNode(` | #${(postFloor + index + 1)}`);
-        post.querySelector('.message-top').appendChild(postNumber);
-    });
-}
+AddPostNumber();
+BlockBlacklistedUsers();
 
 function AddFilterMeButton() {
     var userId = GetUserId();
@@ -23,4 +14,42 @@ function AddFilterMeButton() {
 
     infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
     infobar.insertBefore(filterMeButton, infobar.firstChild);
+}
+
+function AddPostNumber() {
+    var pageNumber = GetUrlParameter('page') || 1;
+    var postFloor = (pageNumber - 1) * POSTS_PER_PAGE;
+
+    document.querySelectorAll('.message-container').forEach(function (post, index) {
+        postNumber = document.createTextNode(` | #${(postFloor + index + 1)}`);
+        post.querySelector('.message-top').appendChild(postNumber);
+    });
+}
+
+function BlockBlacklistedUsers() {
+    var getting = browser.storage.local.get("blacklist");
+    getting.then(function (result) {
+        console.log(result);
+        console.log(result.blacklist);
+        var blacklist = result.blacklist;
+        console.log(blacklist);
+
+        if (blacklist == null) return;
+
+        // Split the string of usernames into an array.
+        // Allows for both comma separated and comma-space separated lists.
+        // TODO: Doesn't actually work. Probably scoping issue
+        var splitlist = blacklist.split(',');
+        console.log(splitlist);
+        splitlist.forEach(function (user, index) {
+            if (user.substring(0) === " ") { user = user.slice(1); }
+        });
+        console.log(splitlist);
+
+        document.querySelectorAll('.message-container').forEach(function (post, index) {
+            if (splitlist.includes(GetUsernameFromPost(post))) {
+                post.style = 'display: none;';
+            }
+        });
+    });
 }

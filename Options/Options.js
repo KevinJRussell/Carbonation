@@ -7,7 +7,7 @@ function saveOptions(e) {
 
 function restoreOptions() {
     function setCurrentChoice(result) {
-        document.querySelector('#blacklist').value = result.blacklist || 'example';
+        document.querySelector('#blacklist').value = result.blacklist || 'Comma separated list goes here';
     }
 
     function onError(error) {
