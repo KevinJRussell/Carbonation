@@ -1,5 +1,6 @@
 AddFilterMeButton();
 AddPostNumber();
+AddQuoteStyle();
 BlockBlacklistedUsers();
 
 function AddFilterMeButton() {
@@ -26,8 +27,21 @@ function AddPostNumber() {
     });
 }
 
+function AddQuoteStyle() {
+    var getting = browser.storage.local.get('quotestyle');
+    getting.then(function (result) {
+        var quotestyle = result.quotestyle;
+
+        if (quotestyle == false) return;
+
+        document.querySelectorAll('.quoted-message').forEach(function (quote, index) {
+            quote.classList.add('quote-style');
+        });
+    });
+}
+
 function BlockBlacklistedUsers() {
-    var getting = browser.storage.local.get("blacklist");
+    var getting = browser.storage.local.get('blacklist');
     getting.then(function (result) {
         var blacklist = result.blacklist;
 
