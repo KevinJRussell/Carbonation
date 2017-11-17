@@ -3,11 +3,10 @@
   "name": "Carbonation",
   "version": "2.0",
 
-  "description": "Get Carbonated",
+  "description": "Functionality and Style improvements for ETI",
 
   "icons": {
-    "48": "Images/Icons/Carbonara-48.jpg",
-    "96": "Images/Icons/Carbonara-96.jpg"
+    "64": "Images/Icons/Lueshi-64.png"
   },
 
   "browser_action": {
