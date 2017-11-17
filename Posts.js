@@ -13,6 +13,8 @@ function AddFilterMeButton() {
     filterMeButton.innerHTML = 'Filter Me';
     filterMeButton.style = 'text-decoration: none;';
 
+    if (infobar == null) return;
+
     infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
     infobar.insertBefore(filterMeButton, infobar.firstChild);
 }
