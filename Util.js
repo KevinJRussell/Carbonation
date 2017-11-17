@@ -1,3 +1,8 @@
+function GetBackgroundColor() {
+    //return document.querySelector('.message-top').style.backgroundColor;
+    return window.getComputedStyle(document.querySelector('.message-top'), null).backgroundColor;
+}
+
 function GetParameter(url, key) {
     var decodeUrl = decodeURIComponent(url);
     var value = null;

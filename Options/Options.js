@@ -21,9 +21,6 @@ function restoreOptions() {
         quotestyle: false
     });
     getting.then(setCurrentChoice, onError);
-
-    // var quotestyleget = browser.storage.local.get('quotestyle');
-    // quotestyleget.then(setCurrentChoice, onError);
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);

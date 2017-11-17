@@ -34,8 +34,13 @@ function AddQuoteStyle() {
 
         if (quotestyle == false) return;
 
+        var color = GetBackgroundColor();
+
+        // Apply the style to each quote on the page
         document.querySelectorAll('.quoted-message').forEach(function (quote, index) {
             quote.classList.add('quote-style');
+            quote.style.borderColor = color;
+            quote.querySelector('.message-top').style.backgroundColor = color;
         });
     });
 }

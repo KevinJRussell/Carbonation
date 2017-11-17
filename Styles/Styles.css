@@ -1,5 +1,5 @@
 .quote-style {
-    border: #6896d5 2px solid;
+    border: #6896d5 2px solid; /* Default color to match the "new" color scheme, should get overridden */
     margin: 0 30px 2px 30px;
     border-radius: 5px;
     padding-left: 3px;
