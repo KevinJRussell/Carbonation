@@ -36,8 +36,6 @@ function AddQuoteStyle() {
 
         var color = GetBackgroundColor();
 
-        console.log(color.toString());
-
         // I should abstract this into the Styles.css file but I'm just not
         var styletag = document.createElement('style');
         styletag.textContent = `.quoted-message {
