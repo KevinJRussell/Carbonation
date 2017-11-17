@@ -36,12 +36,24 @@ function AddQuoteStyle() {
 
         var color = GetBackgroundColor();
 
-        // Apply the style to each quote on the page
-        document.querySelectorAll('.quoted-message').forEach(function (quote, index) {
-            quote.classList.add('quote-style');
-            quote.style.borderColor = color;
-            quote.querySelector('.message-top').style.backgroundColor = color;
-        });
+        console.log(color.toString());
+
+        // I should abstract this into the Styles.css file but I'm just not
+        var styletag = document.createElement('style');
+        styletag.textContent = `.quoted-message {
+                                    border: ${color.toString()} 2px solid;
+                                    margin: 0 30px 2px 30px;
+                                    border-radius: 5px;
+                                    padding-left: 3px;
+                                }
+                                
+                                .quoted-message .message-top {
+                                    background-color: ${color.toString()};
+                                    margin-top: -2px !important;
+                                    margin-left: -3px !important;
+                                    border-radius: 3px 3px 0 0;
+                                }`
+        document.body.appendChild(styletag);
     });
 }
 

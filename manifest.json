@@ -37,8 +37,7 @@
     },
     {
       "matches": ["*://*.endoftheinter.net/showmessages.php*"],
-      "js": ["Posts.js"],
-      "css": ["Styles/Styles.css"]
+      "js": ["Posts.js"]
     }
   ]
 }

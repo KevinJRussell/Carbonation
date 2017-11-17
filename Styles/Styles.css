@@ -1,11 +1,11 @@
-.quote-style {
+.quoted-message {
     border: #6896d5 2px solid; /* Default color to match the "new" color scheme, should get overridden */
     margin: 0 30px 2px 30px;
     border-radius: 5px;
     padding-left: 3px;
 }
 
-.quote-style .message-top {
+.quoted-message .message-top {
     background-color: #6896d5;
     margin-top: -2px !important;
     margin-left: -3px !important;
