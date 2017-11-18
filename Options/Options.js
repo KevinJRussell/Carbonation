@@ -1,6 +1,6 @@
 function saveOptions(e) {
     e.preventDefault();
-    browser.storage.local.set({        
+    browser.storage.local.set({
         blacklist: document.querySelector('#blacklist').value,
         quotestyle: document.querySelector('#quotestyle').checked,
         filterme: document.querySelector('#filterme').checked
