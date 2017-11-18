@@ -12,7 +12,7 @@ function AddFilterMeButton() {
         if (filterEnabled === false) return;
         
         var userId = GetUserId();
-        var url = document.location + '&u=' + userId;
+        var url = GetUrlTopic() + '&u=' + userId; console.log(url);
         var infobar = document.querySelector('.infobar');
         var filterMeButton = document.createElement('a');
         filterMeButton.href = url;

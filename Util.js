@@ -20,6 +20,10 @@ function GetUrlParameter(key) {
     return GetParameter(window.location.search.substring(1), key);
 }
 
+function GetUrlTopic() {
+    return window.location.toString().split('&')[0];
+}
+
 function GetUserId() {
     var userbar = document.querySelector('.userbar');
     var url = userbar.querySelector('a').getAttribute('href');
