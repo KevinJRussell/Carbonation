@@ -74,10 +74,9 @@ function BlockBlacklistedUsers() {
 
         // Split the string of usernames into an array.
         // Allows for both comma separated and comma-space separated lists.
-        // TODO: Doesn't actually work. Probably scoping issue
         var blacklist = blacklist.split(',');
         blacklist.forEach(function (user, index) {
-            if (user.substring(0) === " ") { user = user.slice(1); }
+            if (user.substring(0,1) === ' ') { user = user.slice(1); }
         });
 
         document.querySelectorAll('.message-container').forEach(function (post, index) {
