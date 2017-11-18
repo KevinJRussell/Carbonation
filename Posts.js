@@ -4,19 +4,27 @@ AddQuoteStyle();
 BlockBlacklistedUsers();
 
 function AddFilterMeButton() {
-    var userId = GetUserId();
-    var url = document.location + '&u=' + userId;
-    var infobar = document.querySelector('.infobar');
-    var filterMeButton = document.createElement('a');
-    filterMeButton.href = url;
-    filterMeButton.id = 'filterMe';
-    filterMeButton.innerHTML = 'Filter Me';
-    filterMeButton.style = 'text-decoration: none;';
+    var getSetting = browser.storage.local.get('filterme');
 
-    if (infobar == null) return;
+    getSetting.then(function (result) {
+        var filterEnabled = result.filterme;
 
-    infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
-    infobar.insertBefore(filterMeButton, infobar.firstChild);
+        if (filterEnabled === true) {
+            var userId = GetUserId();
+            var url = document.location + '&u=' + userId;
+            var infobar = document.querySelector('.infobar');
+            var filterMeButton = document.createElement('a');
+            filterMeButton.href = url;
+            filterMeButton.id = 'filterMe';
+            filterMeButton.innerHTML = 'Filter Me';
+            filterMeButton.style = 'text-decoration: none;';
+        
+            if (infobar == null) return;
+        
+            infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
+            infobar.insertBefore(filterMeButton, infobar.firstChild);
+        }
+    });    
 }
 
 function AddPostNumber() {
