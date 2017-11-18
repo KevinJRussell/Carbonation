@@ -9,21 +9,21 @@ function AddFilterMeButton() {
     getSetting.then(function (result) {
         var filterEnabled = result.filterme;
 
-        if (filterEnabled === true) {
-            var userId = GetUserId();
-            var url = document.location + '&u=' + userId;
-            var infobar = document.querySelector('.infobar');
-            var filterMeButton = document.createElement('a');
-            filterMeButton.href = url;
-            filterMeButton.id = 'filterMe';
-            filterMeButton.innerHTML = 'Filter Me';
-            filterMeButton.style = 'text-decoration: none;';
+        if (filterEnabled === false) return;
         
-            if (infobar == null) return;
-        
-            infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
-            infobar.insertBefore(filterMeButton, infobar.firstChild);
-        }
+        var userId = GetUserId();
+        var url = document.location + '&u=' + userId;
+        var infobar = document.querySelector('.infobar');
+        var filterMeButton = document.createElement('a');
+        filterMeButton.href = url;
+        filterMeButton.id = 'filterMe';
+        filterMeButton.innerHTML = 'Filter Me';
+        filterMeButton.style = 'text-decoration: none;';
+
+        if (infobar == null) return;
+
+        infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
+        infobar.insertBefore(filterMeButton, infobar.firstChild);
     });    
 }
 
