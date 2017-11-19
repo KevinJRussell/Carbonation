@@ -57,7 +57,7 @@ function AddQuickPostStyleTags() {
         italicsButton.onclick = function() {
             AddTextToTextArea(textarea, italicsButtonStatus ? '</i>' : '<i>');
             italicsButtonStatus = !italicsButtonStatus;
-            italicsButton.innerHTML = '/i';
+            italicsButton.innerHTML = italicsButtonStatus ? '/i' : 'i';
         };
 
         var boldButton = document.createElement('button');
@@ -68,18 +68,18 @@ function AddQuickPostStyleTags() {
         boldButton.onclick = function() {
             AddTextToTextArea(textarea, boldButtonStatus ? '</b>' : '<b>');
             boldButtonStatus = !boldButtonStatus;
-            boldButton.innerHTML = '/b';
+            boldButton.innerHTML = boldButtonStatus ? '/b' : 'b';
         };
 
         var spoilerButton = document.createElement('button');
         var spoilerButtonStatus = false;
         spoilerButton.id = 'spoilerButton';
         spoilerButton.type = 'button';
-        spoilerButton.innerHTML = '`spoiler';
+        spoilerButton.innerHTML = 'spoiler';
         spoilerButton.onclick = function() {
             AddTextToTextArea(textarea, spoilerButtonStatus ? '</spoiler>' : '<spoiler>');
             spoilerButtonStatus = !spoilerButtonStatus;
-            spoilerButton.innerHTML = '/spoiler';
+            spoilerButton.innerHTML = spoilerButtonStatus ? '/spoiler' : 'spoiler';
         };
 
         quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
