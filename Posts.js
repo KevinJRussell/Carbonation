@@ -10,7 +10,7 @@ function AddFilterMeButton() {
         var filterEnabled = result.filterme;
 
         if (filterEnabled === false) return;
-        
+
         var userId = GetUserId();
         var url = GetUrlTopic() + '&u=' + userId; console.log(url);
         var infobar = document.querySelector('.infobar');
@@ -24,7 +24,7 @@ function AddFilterMeButton() {
 
         infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
         infobar.insertBefore(filterMeButton, infobar.firstChild);
-    });    
+    });
 }
 
 function AddPostNumber() {
@@ -54,7 +54,7 @@ function AddQuoteStyle() {
                                     border-radius: 5px;
                                     padding-left: 3px;
                                 }
-                                
+
                                 .quoted-message .message-top {
                                     background-color: ${color.toString()};
                                     margin-top: -2px !important;
@@ -74,10 +74,7 @@ function BlockBlacklistedUsers() {
 
         // Split the string of usernames into an array.
         // Allows for both comma separated and comma-space separated lists.
-        var blacklist = blacklist.split(',');
-        blacklist.forEach(function (user, index) {
-            if (user.substring(0,1) === ' ') { user = user.slice(1); }
-        });
+        var blacklist = blacklist.split(',').map((user) => user.trim());
 
         document.querySelectorAll('.message-container').forEach(function (post, index) {
             if (blacklist.includes(GetUsernameFromPost(post))) {
