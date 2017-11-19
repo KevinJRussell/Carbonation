@@ -54,8 +54,36 @@ function AddQuickPostStyleTags() {
         italicsButton.id = 'italicsButton';
         italicsButton.type = 'button';
         italicsButton.innerHTML = 'i';
-        italicsButton.onclick = function() { AddTextToTextArea(textarea, italicsButtonStatus ? '</i>' : '<i>'); italicsButtonStatus = !italicsButtonStatus };
+        italicsButton.onclick = function() {
+            AddTextToTextArea(textarea, italicsButtonStatus ? '</i>' : '<i>');
+            italicsButtonStatus = !italicsButtonStatus;
+            italicsButton.innerHTML = '/i';
+        };
 
+        var boldButton = document.createElement('button');
+        var boldButtonStatus = false;
+        boldButton.id = 'boldButton';
+        boldButton.type = 'button';
+        boldButton.innerHTML = 'b';
+        boldButton.onclick = function() {
+            AddTextToTextArea(textarea, boldButtonStatus ? '</b>' : '<b>');
+            boldButtonStatus = !boldButtonStatus;
+            boldButton.innerHTML = '/b';
+        };
+
+        var spoilerButton = document.createElement('button');
+        var spoilerButtonStatus = false;
+        spoilerButton.id = 'spoilerButton';
+        spoilerButton.type = 'button';
+        spoilerButton.innerHTML = '`spoiler';
+        spoilerButton.onclick = function() {
+            AddTextToTextArea(textarea, spoilerButtonStatus ? '</spoiler>' : '<spoiler>');
+            spoilerButtonStatus = !spoilerButtonStatus;
+            spoilerButton.innerHTML = '/spoiler';
+        };
+
+        quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
+        quickpostBody.insertBefore(boldButton, quickpostBody.firstChild);
         quickpostBody.insertBefore(italicsButton, quickpostBody.firstChild);
     });
 }
