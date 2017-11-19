@@ -1,5 +1,4 @@
-function saveOptions(e) {
-    e.preventDefault();
+function saveOptions() {
     browser.storage.local.set({
         blacklist: document.querySelector('#blacklist').value,
         quotestyle: document.querySelector('#quotestyle').checked,
@@ -21,7 +20,7 @@ function restoreOptions() {
     }
 
     var getting = browser.storage.local.get({
-        blacklist: 'Comma separated list goes here',
+        blacklist: '',
         quotestyle: false,
         filterme: false,
         quickpoststyletags: false
@@ -30,4 +29,4 @@ function restoreOptions() {
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.querySelector('form').addEventListener('submit', saveOptions);
+document.querySelectorAll('input').forEach((input) => input.addEventListener('change', saveOptions));
