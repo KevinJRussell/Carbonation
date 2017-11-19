@@ -71,6 +71,28 @@ function AddQuickPostStyleTags() {
             boldButton.innerHTML = boldButtonStatus ? '/b' : 'b';
         };
 
+        var underlineButton = document.createElement('button');
+        var underlineButtonStatus = false;
+        underlineButton.id = 'underlineButton';
+        underlineButton.type = 'button';
+        underlineButton.innerHTML = 'u';
+        underlineButton.onclick = function() {
+            AddTextToTextArea(textarea, underlineButtonStatus ? '</u>' : '<u>');
+            underlineButtonStatus = !underlineButtonStatus;
+            underlineButton.innerHTML = underlineButtonStatus ? '/u' : 'u';
+        };
+
+        var preButton = document.createElement('button');
+        var preButtonStatus = false;
+        preButton.id = 'preButton';
+        preButton.type = 'button';
+        preButton.innerHTML = 'pre';
+        preButton.onclick = function() {
+            AddTextToTextArea(textarea, preButtonStatus ? '</pre>' : '<pre>');
+            preButtonStatus = !preButtonStatus;
+            preButton.innerHTML = preButtonStatus ? '/pre' : 'pre';
+        };
+
         var spoilerButton = document.createElement('button');
         var spoilerButtonStatus = false;
         spoilerButton.id = 'spoilerButton';
@@ -83,6 +105,8 @@ function AddQuickPostStyleTags() {
         };
 
         quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
+        quickpostBody.insertBefore(preButton, quickpostBody.firstChild);
+        quickpostBody.insertBefore(underlineButton, quickpostBody.firstChild);
         quickpostBody.insertBefore(boldButton, quickpostBody.firstChild);
         quickpostBody.insertBefore(italicsButton, quickpostBody.firstChild);
     });
