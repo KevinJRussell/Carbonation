@@ -1,5 +1,6 @@
 AddFilterMeButton();
 AddPostNumber();
+AddQuickPostStyleTags();
 AddQuoteStyle();
 BlockBlacklistedUsers();
 
@@ -34,6 +35,28 @@ function AddPostNumber() {
     document.querySelectorAll('.message-container').forEach(function (post, index) {
         postNumber = document.createTextNode(` | #${(postFloor + index + 1)}`);
         post.querySelector('.message-top').appendChild(postNumber);
+    });
+}
+
+function AddQuickPostStyleTags() {
+    var getSetting = browser.storage.local.get('quickpoststyletags');
+
+    getSetting.then(function (result) {
+        var quickpoststyletags = result.quickpoststyletags;
+
+        if (quickpoststyletags === false) return;
+
+        var quickpostBody = document.querySelector('.quickpost-body');
+        var textarea = quickpostBody.querySelector('textarea');
+
+        var italicsButton = document.createElement('button');
+        var italicsButtonStatus = false;
+        italicsButton.id = 'italicsButton';
+        italicsButton.type = 'button';
+        italicsButton.innerHTML = 'i';
+        italicsButton.onclick = function() { AddTextToTextArea(textarea, italicsButtonStatus ? '</i>' : '<i>'); italicsButtonStatus = !italicsButtonStatus };
+
+        quickpostBody.insertBefore(italicsButton, quickpostBody.firstChild);
     });
 }
 

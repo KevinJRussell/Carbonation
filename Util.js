@@ -1,3 +1,19 @@
+function AddTextToTextArea(ta, text) {
+    var start = ta.selectionStart;
+    var end = ta.selectionEnd;
+
+    if (start || start === 0) {
+        ta.value = ta.value.substring(0, start)
+            + text
+            + ta.value.substring(end, ta.value.length);
+        ta.selectionStart = start + text.length;
+        ta.selectionEnd = start + text.length;
+    }
+    else {
+        ta.value += text;
+    }
+}
+
 function GetBackgroundColor() {
     return window.getComputedStyle(document.querySelector('.message-top'), null).backgroundColor;
 }
