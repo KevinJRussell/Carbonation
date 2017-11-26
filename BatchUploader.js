@@ -112,7 +112,7 @@ var BatchUpLLoder = new function()
 
     function doUpload(resolve, reject, file, index)
     {
-        var form = new window.FormData();
+        var form = new FormData();
         form.append("file", file);
 
         var request = new XMLHttpRequest();
