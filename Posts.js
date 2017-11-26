@@ -2,8 +2,30 @@ AddFilterMeButton();
 ProcessNewPosts();
 AddQuickPostStyleTags();
 AddQuoteStyle();
-BlockBlacklistedUsers();
 MonitorNewPosts();
+
+function ProcessNewPosts()
+{
+    var getting = browser.storage.local.get('blacklist');
+    getting.then((result) => {
+        var blacklistSetting = result.blacklist || "";
+
+        // Split the string of usernames into an array.
+        // Allows for both comma separated and comma-space separated lists.
+        var blacklist = blacklistSetting.split(',').map((user) => user.trim());
+
+        // Array.from needed because NodeList doesn't implement indexOf
+        var messages = Array.from(document.querySelectorAll('.message-container'));
+        var newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
+
+        newMessages.forEach((post) => {
+            // Add new post processing functions here
+            AddPostNumber(post, messages);
+            BlockBlacklistedUsers(post, blacklist);
+            post.classList.add('carbonation-processed');
+        });
+    });
+}
 
 function AddFilterMeButton() {
     var getSetting = browser.storage.local.get('filterme');
@@ -40,17 +62,6 @@ function AddPostNumber(post, messages) {
         postNumber = document.createTextNode(` | #${(postFloor + postIndex + 1)}`);
         post.querySelector('.message-top').appendChild(postNumber);
     }
-}
-
-function ProcessNewPosts()
-{
-    // Array.from needed because NodeList doesn't implement indexOf
-    var messages = Array.from(document.querySelectorAll('.message-container'));
-    var newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
-    newMessages.forEach(function (post) {
-        AddPostNumber(post, messages);
-        post.classList.add('carbonation-processed');
-    });
 }
 
 function AddQuickPostStyleTags() {
@@ -155,23 +166,10 @@ function AddQuoteStyle() {
     });
 }
 
-function BlockBlacklistedUsers() {
-    var getting = browser.storage.local.get('blacklist');
-    getting.then(function (result) {
-        var blacklist = result.blacklist;
-
-        if (blacklist == null) return;
-
-        // Split the string of usernames into an array.
-        // Allows for both comma separated and comma-space separated lists.
-        var blacklist = blacklist.split(',').map((user) => user.trim());
-
-        document.querySelectorAll('.message-container').forEach(function (post, index) {
-            if (blacklist.includes(GetUsernameFromPost(post))) {
-                post.style = 'display: none;';
-            }
-        });
-    });
+function BlockBlacklistedUsers(post, blacklist) {
+    if (blacklist.includes(GetUsernameFromPost(post))) {
+        post.style = 'display: none;';
+    }
 }
 
 function MonitorNewPosts() {
