@@ -1,8 +1,9 @@
 AddFilterMeButton();
-AddPostNumber();
+ProcessNewPosts();
 AddQuickPostStyleTags();
 AddQuoteStyle();
 BlockBlacklistedUsers();
+MonitorNewPosts();
 
 function AddFilterMeButton() {
     var getSetting = browser.storage.local.get('filterme');
@@ -13,7 +14,7 @@ function AddFilterMeButton() {
         if (filterEnabled === false) return;
 
         var userId = GetUserId();
-        var url = GetUrlTopic() + '&u=' + userId; console.log(url);
+        var url = GetUrlTopic() + '&u=' + userId;
         var infobar = document.querySelector('.infobar');
         var filterMeButton = document.createElement('a');
         filterMeButton.href = url;
@@ -28,13 +29,27 @@ function AddFilterMeButton() {
     });
 }
 
-function AddPostNumber() {
+function AddPostNumber(post, messages) {
     var pageNumber = GetUrlParameter('page') || 1;
     var postFloor = (pageNumber - 1) * POSTS_PER_PAGE;
 
-    document.querySelectorAll('.message-container').forEach(function (post, index) {
-        postNumber = document.createTextNode(` | #${(postFloor + index + 1)}`);
+    var postIndex = messages.indexOf(post);
+
+    if (postIndex >= 0)
+    {
+        postNumber = document.createTextNode(` | #${(postFloor + postIndex + 1)}`);
         post.querySelector('.message-top').appendChild(postNumber);
+    }
+}
+
+function ProcessNewPosts()
+{
+    // Array.from needed because NodeList doesn't implement indexOf
+    var messages = Array.from(document.querySelectorAll('.message-container'));
+    var newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
+    newMessages.forEach(function (post) {
+        AddPostNumber(post, messages);
+        post.classList.add('carbonation-processed');
     });
 }
 
@@ -157,4 +172,16 @@ function BlockBlacklistedUsers() {
             }
         });
     });
+}
+
+function MonitorNewPosts() {
+    var postObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === "childList")
+            {
+                ProcessNewPosts();
+            }
+        });
+    });
+    postObserver.observe(document.querySelector('.message-container').parentNode, { childList: true });
 }
