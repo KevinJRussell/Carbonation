@@ -1,6 +1,6 @@
 function AddTextToTextArea(ta, text) {
-    var start = ta.selectionStart;
-    var end = ta.selectionEnd;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
 
     if (start || start === 0) {
         ta.value = ta.value.substring(0, start)
@@ -19,19 +19,19 @@ function GetBackgroundColor() {
 }
 
 function GetPageNumber() {
-    var pageNumber = GetUrlParameter('page');
+    const pageNumber = GetUrlParameter('page');
 
     return pageNumber === null ? 1 : parseInt(pageNumber);
 }
 
 function GetParameter(url, key) {
-    var decodeUrl = decodeURIComponent(url);
-    var value = null;
+    const decodeUrl = decodeURIComponent(url);
+    let value = null;
 
     decodeUrl.split('&').forEach(function (queryString) {
-        var urlParameter = queryString.split('=');
+        const urlParameter = queryString.split('=');
 
-        if (urlParameter[0] == key)
+        if (urlParameter[0] === key)
             value = urlParameter[1];
     });
 
@@ -53,8 +53,8 @@ function GetUrlTopic() {
 }
 
 function GetUserId() {
-    var userbar = document.querySelector('.userbar');
-    var url = userbar.querySelector('a').getAttribute('href');
+    const userbar = document.querySelector('.userbar');
+    const url = userbar.querySelector('a').getAttribute('href');
 
     return GetParameter(url.split('?')[1], 'user');
 }

@@ -23,7 +23,7 @@ function restoreOptions() {
         console.log(`Error: ${error}`);
     }
 
-    var getting = browser.storage.local.get({
+    let getting = browser.storage.local.get({
         blacklist: '',
         filterme: false,
         messagehistory: false,

@@ -8,17 +8,17 @@ MonitorNewPosts();
 
 function ProcessNewPosts()
 {
-    var getting = browser.storage.local.get('blacklist');
+    const getting = browser.storage.local.get('blacklist');
     getting.then((result) => {
-        var blacklistSetting = result.blacklist || "";
+        const blacklistSetting = result.blacklist || "";
 
         // Split the string of usernames into an array.
         // Allows for both comma separated and comma-space separated lists.
-        var blacklist = blacklistSetting.split(',').map((user) => user.trim());
+        const blacklist = blacklistSetting.split(',').map((user) => user.trim());
 
         // Array.from needed because NodeList doesn't implement indexOf
-        var messages = Array.from(document.querySelectorAll('.message-container'));
-        var newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
+        const messages = Array.from(document.querySelectorAll('.message-container'));
+        const newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
 
         newMessages.forEach((post) => {
             // Add new post processing functions here
@@ -30,17 +30,17 @@ function ProcessNewPosts()
 }
 
 function AddFilterMeButton() {
-    var getSetting = browser.storage.local.get('filterme');
+    const getSetting = browser.storage.local.get('filterme');
 
     getSetting.then(function (result) {
-        var filterEnabled = result.filterme;
+        const filterEnabled = result.filterme;
 
         if (filterEnabled === false) return;
 
-        var userId = GetUserId();
-        var url = GetUrlTopic() + '&u=' + userId;
-        var infobar = document.querySelector('.infobar');
-        var filterMeButton = document.createElement('a');
+        const userId = GetUserId();
+        const url = GetUrlTopic() + '&u=' + userId;
+        const infobar = document.querySelector('.infobar');
+        const filterMeButton = document.createElement('a');
         filterMeButton.href = url;
         filterMeButton.id = 'filterMe';
         filterMeButton.innerHTML = 'Filter Me';
@@ -54,31 +54,31 @@ function AddFilterMeButton() {
 }
 
 function AddPostNumber(post, messages) {
-    var pageNumber = GetUrlParameter('page') || 1;
-    var postFloor = (pageNumber - 1) * POSTS_PER_PAGE;
+    const pageNumber = GetUrlParameter('page') || 1;
+    const postFloor = (pageNumber - 1) * POSTS_PER_PAGE;
 
-    var postIndex = messages.indexOf(post);
+    const postIndex = messages.indexOf(post);
 
     if (postIndex >= 0)
     {
-        postNumber = document.createTextNode(` | #${(postFloor + postIndex + 1)}`);
+        const postNumber = document.createTextNode(` | #${(postFloor + postIndex + 1)}`);
         post.querySelector('.message-top').appendChild(postNumber);
     }
 }
 
 function AddQuickPostStyleTags() {
-    var getSetting = browser.storage.local.get('quickpoststyletags');
+    const getSetting = browser.storage.local.get('quickpoststyletags');
 
     getSetting.then(function (result) {
-        var quickpoststyletags = result.quickpoststyletags;
+        const quickpoststyletags = result.quickpoststyletags;
 
         if (quickpoststyletags === false) return;
 
-        var quickpostBody = document.querySelector('.quickpost-body');
-        var textarea = quickpostBody.querySelector('textarea');
+        const quickpostBody = document.querySelector('.quickpost-body');
+        const textarea = quickpostBody.querySelector('textarea');
 
-        var italicsButton = document.createElement('button');
-        var italicsButtonStatus = false;
+        const italicsButton = document.createElement('button');
+        let italicsButtonStatus = false;
         italicsButton.id = 'italicsButton';
         italicsButton.type = 'button';
         italicsButton.innerHTML = 'i';
@@ -88,8 +88,8 @@ function AddQuickPostStyleTags() {
             italicsButton.innerHTML = italicsButtonStatus ? '/i' : 'i';
         };
 
-        var boldButton = document.createElement('button');
-        var boldButtonStatus = false;
+        const boldButton = document.createElement('button');
+        let boldButtonStatus = false;
         boldButton.id = 'boldButton';
         boldButton.type = 'button';
         boldButton.innerHTML = 'b';
@@ -99,8 +99,8 @@ function AddQuickPostStyleTags() {
             boldButton.innerHTML = boldButtonStatus ? '/b' : 'b';
         };
 
-        var underlineButton = document.createElement('button');
-        var underlineButtonStatus = false;
+        const underlineButton = document.createElement('button');
+        let underlineButtonStatus = false;
         underlineButton.id = 'underlineButton';
         underlineButton.type = 'button';
         underlineButton.innerHTML = 'u';
@@ -110,8 +110,8 @@ function AddQuickPostStyleTags() {
             underlineButton.innerHTML = underlineButtonStatus ? '/u' : 'u';
         };
 
-        var preButton = document.createElement('button');
-        var preButtonStatus = false;
+        const preButton = document.createElement('button');
+        let preButtonStatus = false;
         preButton.id = 'preButton';
         preButton.type = 'button';
         preButton.innerHTML = 'pre';
@@ -121,8 +121,8 @@ function AddQuickPostStyleTags() {
             preButton.innerHTML = preButtonStatus ? '/pre' : 'pre';
         };
 
-        var spoilerButton = document.createElement('button');
-        var spoilerButtonStatus = false;
+        const spoilerButton = document.createElement('button');
+        let spoilerButtonStatus = false;
         spoilerButton.id = 'spoilerButton';
         spoilerButton.type = 'button';
         spoilerButton.innerHTML = 'spoiler';
@@ -141,16 +141,16 @@ function AddQuickPostStyleTags() {
 }
 
 function AddQuoteStyle() {
-    var getting = browser.storage.local.get('quotestyle');
+    const getting = browser.storage.local.get('quotestyle');
     getting.then(function (result) {
-        var quotestyle = result.quotestyle;
+        const quotestyle = result.quotestyle;
 
         if (quotestyle === false) return;
 
-        var color = GetBackgroundColor();
+        const color = GetBackgroundColor();
 
         // I should abstract this into the Styles.css file but I'm just not
-        var styletag = document.createElement('style');
+        const styletag = document.createElement('style');
         styletag.textContent = `.quoted-message {
                                     border: ${color.toString()} 2px solid;
                                     margin: 0 30px 2px 30px;
@@ -169,20 +169,20 @@ function AddQuoteStyle() {
 }
 
 function AddTCIndicator() {
-    var getting = browser.storage.local.get('tcindicator');
+    const getting = browser.storage.local.get('tcindicator');
     getting.then(function (result) {
-        var tcindicator = result.tcindicator;
+        const tcindicator = result.tcindicator;
 
         if (tcindicator === false) return;
 
         // Too difficult to get the TC if not on the first page
         if (GetPageNumber() !== 1) return;
 
-        var tcName = GetUsernameFromPost(document.querySelector('.message-container'));
+        const tcName = GetUsernameFromPost(document.querySelector('.message-container'));
 
-        document.querySelectorAll('.message-container').forEach(function (post, index) {
+        document.querySelectorAll('.message-container').forEach(function (post) {
             if (tcName === GetUsernameFromPost(post)) {
-                var tcTag = document.createTextNode(` | TC`);
+                const tcTag = document.createTextNode(` | TC`);
                 post.querySelector('.message-top').appendChild(tcTag);
             }
         });
@@ -196,10 +196,9 @@ function BlockBlacklistedUsers(post, blacklist) {
 }
 
 function MonitorNewPosts() {
-    var postObserver = new MutationObserver((mutations) => {
+    const postObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
-            if (mutation.type === "childList")
-            {
+            if (mutation.type === "childList") {
                 ProcessNewPosts();
             }
         });

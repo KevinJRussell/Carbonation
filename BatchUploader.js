@@ -1,8 +1,8 @@
-var BatchUpLLoder = new function()
+let BatchUpLLoder = new function()
 {
-    var abort = true;
-    var imageBox = null;
-    var uploadRequests = [];
+    let abort = true;
+    //var imageBox = null;
+    let uploadRequests = [];
 
     this.uploadFiles = function(e)
     {
@@ -11,25 +11,22 @@ var BatchUpLLoder = new function()
         e.target.blur();
     };
 
-    processUpload = function(target, files)
-    {
-        if (!files.length)
-        {
+    const processUpload = function (target, files) {
+        if (!files.length) {
             return;
         }
 
         abort = false;
-        var abortBttn = document.createElement("button");
+        let abortBttn = document.createElement("button");
         abortBttn.id = "foxlinksAbortBttn";
         abortBttn.textContent = "Abort Upload";
         abortBttn.addEventListener("click", abortUpload, false);
-        var form = target.parentNode;
+        let form = target.parentNode;
         form.appendChild(document.createTextNode(" "));
         form.appendChild(abortBttn);
-        var imageBox = document.getElementById("foxlinksUploadImageBox");
+        let imageBox = document.getElementById("foxlinksUploadImageBox");
 
-        if (!imageBox)
-        {
+        if (!imageBox) {
             imageBox = document.createElement("textarea");
             imageBox.readOnly = true;
             imageBox.id = "foxlinksUploadImageBox";
@@ -40,9 +37,11 @@ var BatchUpLLoder = new function()
             imageBox.style.setProperty("bottom", "20px", "");
             imageBox.style.setProperty("right", "5px", "");
             imageBox.style.setProperty("z-index", "21", "");
-            imageBox.addEventListener("click", function(e) { e.target.select(); }, false);
+            imageBox.addEventListener("click", function (e) {
+                e.target.select();
+            }, false);
             document.body.appendChild(imageBox);
-            var closeBox = document.createElement("a");
+            let closeBox = document.createElement("a");
             closeBox.href = "javascript:void(0)";
             closeBox.style.setProperty("display", "block", "");
             closeBox.style.setProperty("text-align", "center", "");
@@ -64,21 +63,21 @@ var BatchUpLLoder = new function()
 
         document.getElementById("foxlinksUploadBttn").disabled = true;
 
-        filesArray = Array.from(files);
+        const filesArray = Array.from(files);
 
-        imageBox.value = filesArray.map(() => "UPLOADING...\n").join("")
+        imageBox.value = filesArray.map(() => "UPLOADING...\n").join("");
 
-        var uploadPromises = filesArray.map((f, i) => new Promise((resolve, reject) => {
+        let uploadPromises = filesArray.map((f, i) => new Promise((resolve, reject) => {
             doUpload(resolve, reject, f, i);
         }));
 
         Promise.all(uploadPromises).then(abortUpload);
-    }
+    };
 
     function getFiles(target)
     {
-        filepicker = document.createElement("input");
-        filepicker.type = "file"
+        const filepicker = document.createElement("input");
+        filepicker.type = "file";
         filepicker.multiple = true;
         filepicker.accept = "image/*";
         filepicker.onchange = () => { processUpload(target, filepicker.files); };
@@ -88,9 +87,9 @@ var BatchUpLLoder = new function()
     function abortUpload()
     {
         abort = true;
-        offset = 0;
+        const offset = 0;
 
-        var abortBttn = document.getElementById("foxlinksAbortBttn");
+        let abortBttn = document.getElementById("foxlinksAbortBttn");
 
         if (abortBttn)
         {
@@ -101,7 +100,7 @@ var BatchUpLLoder = new function()
 
         while (uploadRequests.length > 0)
         {
-            if (uploadRequests[0].readyState != XMLHttpRequest.DONE)
+            if (uploadRequests[0].readyState !== XMLHttpRequest.DONE)
             {
                 uploadRequests[0].abort();
             }
@@ -112,13 +111,13 @@ var BatchUpLLoder = new function()
 
     function doUpload(resolve, reject, file, index)
     {
-        var form = new FormData();
+        let form = new FormData();
         form.append("file", file);
 
-        var request = new XMLHttpRequest();
+        let request = new XMLHttpRequest();
 
         request.onreadystatechange = () => {
-            if (request.readyState != XMLHttpRequest.DONE)
+            if (request.readyState !== XMLHttpRequest.DONE)
             {
                 if (abort)
                 {
@@ -128,15 +127,15 @@ var BatchUpLLoder = new function()
                 return;
             }
 
-            var img = request.responseText.match(/<input value="<img src=&quot;(.*?)&quot; \/>"/);
+            let img = request.responseText.match(/<input value="<img src=&quot;(.*?)&quot; \/>"/);
 
-            var imageBox = document.getElementById("foxlinksUploadImageBox");
+            let imageBox = document.getElementById("foxlinksUploadImageBox");
 
             if (imageBox)
             {
-                var values = imageBox.value.split("\n");
+                let values = imageBox.value.split("\n");
 
-                if (img && request.responseText.indexOf("Errors were encountered processing one or more of your uploads") == -1)
+                if (img && request.responseText.indexOf("Errors were encountered processing one or more of your uploads") === -1)
                 {
                     values[index] = `<img src="${img[1]}" />`;
                 }
@@ -148,7 +147,7 @@ var BatchUpLLoder = new function()
                 imageBox.value = values.join("\n");
             }
 
-            var uploadRequestsIndex = uploadRequests.indexOf(request);
+            let uploadRequestsIndex = uploadRequests.indexOf(request);
             if (uploadRequestsIndex >= 0)
             {
                 uploadRequests.splice(uploadRequestsIndex, 1);
@@ -163,10 +162,10 @@ var BatchUpLLoder = new function()
     }
 };
 
-var imageBttn = document.querySelector('input[value="Upload Image"]');
+let imageBttn = document.querySelector('input[value="Upload Image"]');
 if (imageBttn)
 {
-    var batchBttn = document.createElement("button");
+    let batchBttn = document.createElement("button");
     batchBttn.id = "foxlinksUploadBttn";
     batchBttn.textContent = "Batch Uploader";
     batchBttn.addEventListener("click", BatchUpLLoder.uploadFiles, false);

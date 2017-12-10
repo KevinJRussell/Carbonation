@@ -3,15 +3,15 @@ const POSTS_PER_PAGE = 50;
 AddMessageHistoryButton();
 
 function AddMessageHistoryButton() {
-    var getting = browser.storage.local.get('messagehistory');
+    const getting = browser.storage.local.get('messagehistory');
     getting.then(function (result) {
-        var history = result.messagehistory;
+        const history = result.messagehistory;
 
         if (history === false) return;
 
-        var menubar = document.querySelector('.menubar');
-        var bookmarks = menubar.querySelector('#bookmarks');
-        var messageHistoryButton = document.createElement('a');
+        const menubar = document.querySelector('.menubar');
+        const bookmarks = menubar.querySelector('#bookmarks');
+        const messageHistoryButton = document.createElement('a');
         messageHistoryButton.href = 'history.php';
         messageHistoryButton.id = 'messageHistory';
         messageHistoryButton.innerHTML = 'Message History';
