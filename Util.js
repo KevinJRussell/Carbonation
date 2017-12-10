@@ -18,6 +18,12 @@ function GetBackgroundColor() {
     return window.getComputedStyle(document.querySelector('.message-top'), null).backgroundColor;
 }
 
+function GetPageNumber() {
+    var pageNumber = GetUrlParameter('page');
+
+    return pageNumber === null ? 1 : parseInt(pageNumber);
+}
+
 function GetParameter(url, key) {
     var decodeUrl = decodeURIComponent(url);
     var value = null;
@@ -32,6 +38,12 @@ function GetParameter(url, key) {
     return value;
 }
 
+// key = url parameter
+// Examples:
+// id = Message ID (used with message.php)
+// page = Page Number (not present on page 1)
+// r = Revision Number (for individual messages)
+// u = User ID (Only used on showmessages.php in conjunction with topic for filtering)
 function GetUrlParameter(key) {
     return GetParameter(window.location.search.substring(1), key);
 }

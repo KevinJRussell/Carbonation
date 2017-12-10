@@ -2,6 +2,7 @@ AddFilterMeButton();
 AddPostNumber();
 AddQuickPostStyleTags();
 AddQuoteStyle();
+AddTCIndicator();
 BlockBlacklistedUsers();
 
 function AddFilterMeButton() {
@@ -13,7 +14,7 @@ function AddFilterMeButton() {
         if (filterEnabled === false) return;
 
         var userId = GetUserId();
-        var url = GetUrlTopic() + '&u=' + userId; console.log(url);
+        var url = GetUrlTopic() + '&u=' + userId;
         var infobar = document.querySelector('.infobar');
         var filterMeButton = document.createElement('a');
         filterMeButton.href = url;
@@ -21,7 +22,7 @@ function AddFilterMeButton() {
         filterMeButton.innerHTML = 'Filter Me';
         filterMeButton.style = 'text-decoration: none;';
 
-        if (infobar == null) return;
+        if (infobar === null) return;
 
         infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
         infobar.insertBefore(filterMeButton, infobar.firstChild);
@@ -33,7 +34,7 @@ function AddPostNumber() {
     var postFloor = (pageNumber - 1) * POSTS_PER_PAGE;
 
     document.querySelectorAll('.message-container').forEach(function (post, index) {
-        postNumber = document.createTextNode(` | #${(postFloor + index + 1)}`);
+        var postNumber = document.createTextNode(` | #${(postFloor + index + 1)}`);
         post.querySelector('.message-top').appendChild(postNumber);
     });
 }
@@ -117,7 +118,7 @@ function AddQuoteStyle() {
     getting.then(function (result) {
         var quotestyle = result.quotestyle;
 
-        if (quotestyle == false) return;
+        if (quotestyle === false) return;
 
         var color = GetBackgroundColor();
 
@@ -135,8 +136,29 @@ function AddQuoteStyle() {
                                     margin-top: -2px !important;
                                     margin-left: -3px !important;
                                     border-radius: 3px 3px 0 0;
-                                }`
+                                }`;
         document.body.appendChild(styletag);
+    });
+}
+
+function AddTCIndicator() {
+    var getting = browser.storage.local.get('tcindicator');
+    getting.then(function (result) {
+        var tcindicator = result.tcindicator;
+
+        if (tcindicator === false) return;
+
+        // Too difficult to get the TC if not on the first page
+        if (GetPageNumber() !== 1) return;
+
+        var tcName = GetUsernameFromPost(document.querySelector('.message-container'));
+
+        document.querySelectorAll('.message-container').forEach(function (post, index) {
+            if (tcName === GetUsernameFromPost(post)) {
+                var tcTag = document.createTextNode(` | TC`);
+                post.querySelector('.message-top').appendChild(tcTag);
+            }
+        });
     });
 }
 

@@ -1,18 +1,22 @@
 function saveOptions() {
     browser.storage.local.set({
         blacklist: document.querySelector('#blacklist').value,
-        quotestyle: document.querySelector('#quotestyle').checked,
         filterme: document.querySelector('#filterme').checked,
-        quickpoststyletags: document.querySelector('#quickpoststyletags').checked
+        messagehistory: document.querySelector('#messagehistory').checked,
+        quickpoststyletags: document.querySelector('#quickpoststyletags').checked,
+        quotestyle: document.querySelector('#quotestyle').checked,
+        tcindicator: document.querySelector('#tcindicator').checked
     });
 }
 
 function restoreOptions() {
     function setCurrentChoice(result) {
         document.querySelector('#blacklist').value = result.blacklist;
-        document.querySelector('#quotestyle').checked = result.quotestyle;
         document.querySelector('#filterme').checked = result.filterme;
+        document.querySelector('#messagehistory').checked = result.messagehistory;
         document.querySelector('#quickpoststyletags').checked = result.quickpoststyletags;
+        document.querySelector('#quotestyle').checked = result.quotestyle;
+        document.querySelector('#tcindicator').checked = result.tcindicator;
     }
 
     function onError(error) {
@@ -21,9 +25,11 @@ function restoreOptions() {
 
     var getting = browser.storage.local.get({
         blacklist: '',
-        quotestyle: false,
         filterme: false,
-        quickpoststyletags: false
+        messagehistory: false,
+        quickpoststyletags: false,
+        quotestyle: false,
+        tcindicator: false
     });
     getting.then(setCurrentChoice, onError);
 }
