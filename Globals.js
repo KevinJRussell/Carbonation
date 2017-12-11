@@ -12,7 +12,7 @@ function AddMessageHistoryButton() {
         const menubar = document.querySelector('.menubar');
         const bookmarks = menubar.querySelector('#bookmarks');
         const messageHistoryButton = document.createElement('a');
-        messageHistoryButton.href = 'history.php';
+        messageHistoryButton.href = '/history.php';
         messageHistoryButton.id = 'messageHistory';
         messageHistoryButton.innerHTML = 'Message History';
 
