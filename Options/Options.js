@@ -4,6 +4,7 @@ function saveOptions() {
         filterme: document.querySelector('#filterme').checked,
         messagehistory: document.querySelector('#messagehistory').checked,
         quickpoststyletags: document.querySelector('#quickpoststyletags').checked,
+        postnumbers: document.querySelector('#postnumbers').checked,
         quotestyle: document.querySelector('#quotestyle').checked,
         tcindicator: document.querySelector('#tcindicator').checked
     });
@@ -14,6 +15,7 @@ function restoreOptions() {
         document.querySelector('#blacklist').value = result.blacklist;
         document.querySelector('#filterme').checked = result.filterme;
         document.querySelector('#messagehistory').checked = result.messagehistory;
+        document.querySelector('#postnumbers').checked = result.postnumbers;
         document.querySelector('#quickpoststyletags').checked = result.quickpoststyletags;
         document.querySelector('#quotestyle').checked = result.quotestyle;
         document.querySelector('#tcindicator').checked = result.tcindicator;
@@ -27,6 +29,7 @@ function restoreOptions() {
         blacklist: '',
         filterme: false,
         messagehistory: false,
+        postnumbers: false,
         quickpoststyletags: false,
         quotestyle: false,
         tcindicator: false

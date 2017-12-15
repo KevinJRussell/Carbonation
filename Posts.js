@@ -1,34 +1,66 @@
-AddFilterMeButton();
-ProcessNewPosts();
-AddQuickPostStyleTags();
-AddQuoteStyle();
-AddTCIndicator();
-BlockBlacklistedUsers();
-MonitorNewPosts();
+let settings;
+let blacklist;
 
-function ProcessNewPosts()
-{
-    const getting = browser.storage.local.get('blacklist');
-    getting.then((result) => {
-        const blacklistSetting = result.blacklist || "";
+GetSettings();
 
-        // Split the string of usernames into an array.
-        // Allows for both comma separated and comma-space separated lists.
-        const blacklist = blacklistSetting.split(',').map((user) => user.trim());
+// Setup functions:
+function GetSettings() {
+    const getSettings = browser.storage.local.get();
 
-        // Array.from needed because NodeList doesn't implement indexOf
-        const messages = Array.from(document.querySelectorAll('.message-container'));
-        const newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
+    getSettings.then(function (result) {
+        settings = result;
+        blacklist = result.blacklist.split(',').map((user) => user.trim());
 
-        newMessages.forEach((post) => {
-            // Add new post processing functions here
-            AddPostNumber(post, messages);
-            BlockBlacklistedUsers(post, blacklist);
-            post.classList.add('carbonation-processed');
-        });
+        ProcessPage();
+
+        ProcessNewPosts();
+
+        MonitorNewPosts();
     });
 }
 
+function ProcessPage() {
+    if (settings.filterme)
+        AddFilterMeButton();
+
+    if (settings.quickpoststyletags)
+        AddQuickPostStyleTags();
+
+    if (settings.quotestyle)
+        AddQuoteStyle();
+}
+
+function ProcessNewPosts() {
+    // Array.from needed because NodeList doesn't implement indexOf
+    const messages = Array.from(document.querySelectorAll('.message-container'));
+    const newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
+
+    newMessages.forEach((post) => {
+        if (settings.postnumbers)
+            AddPostNumber(post, messages);
+
+        if (settings.tcindicator)
+            AddTCIndicator(post);
+
+        if (blacklist)
+            BlockBlacklistedUsers(post, blacklist);
+
+        post.classList.add('carbonation-processed');
+    });
+}
+
+function MonitorNewPosts() {
+    const postObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === "childList") {
+                ProcessNewPosts();
+            }
+        });
+    });
+    postObserver.observe(document.querySelector('.message-container').parentNode, { childList: true });
+}
+
+// Page mods:
 function AddFilterMeButton() {
     const getSetting = browser.storage.local.get('filterme');
 
@@ -54,7 +86,7 @@ function AddFilterMeButton() {
 }
 
 function AddPostNumber(post, messages) {
-    const pageNumber = GetUrlParameter('page') || 1;
+    const pageNumber = GetPageNumber();
     const postFloor = (pageNumber - 1) * POSTS_PER_PAGE;
 
     const postIndex = messages.indexOf(post);
@@ -67,141 +99,106 @@ function AddPostNumber(post, messages) {
 }
 
 function AddQuickPostStyleTags() {
-    const getSetting = browser.storage.local.get('quickpoststyletags');
+    const quickpostBody = document.querySelector('.quickpost-body');
+    const textarea = quickpostBody.querySelector('textarea');
 
-    getSetting.then(function (result) {
-        const quickpoststyletags = result.quickpoststyletags;
+    const italicsButton = document.createElement('button');
+    let italicsButtonStatus = false;
+    italicsButton.id = 'italicsButton';
+    italicsButton.type = 'button';
+    italicsButton.innerHTML = 'i';
+    italicsButton.onclick = function() {
+        AddTextToTextArea(textarea, italicsButtonStatus ? '</i>' : '<i>');
+        italicsButtonStatus = !italicsButtonStatus;
+        italicsButton.innerHTML = italicsButtonStatus ? '/i' : 'i';
+    };
 
-        if (quickpoststyletags === false) return;
+    const boldButton = document.createElement('button');
+    let boldButtonStatus = false;
+    boldButton.id = 'boldButton';
+    boldButton.type = 'button';
+    boldButton.innerHTML = 'b';
+    boldButton.onclick = function() {
+        AddTextToTextArea(textarea, boldButtonStatus ? '</b>' : '<b>');
+        boldButtonStatus = !boldButtonStatus;
+        boldButton.innerHTML = boldButtonStatus ? '/b' : 'b';
+    };
 
-        const quickpostBody = document.querySelector('.quickpost-body');
-        const textarea = quickpostBody.querySelector('textarea');
+    const underlineButton = document.createElement('button');
+    let underlineButtonStatus = false;
+    underlineButton.id = 'underlineButton';
+    underlineButton.type = 'button';
+    underlineButton.innerHTML = 'u';
+    underlineButton.onclick = function() {
+        AddTextToTextArea(textarea, underlineButtonStatus ? '</u>' : '<u>');
+        underlineButtonStatus = !underlineButtonStatus;
+        underlineButton.innerHTML = underlineButtonStatus ? '/u' : 'u';
+    };
 
-        const italicsButton = document.createElement('button');
-        let italicsButtonStatus = false;
-        italicsButton.id = 'italicsButton';
-        italicsButton.type = 'button';
-        italicsButton.innerHTML = 'i';
-        italicsButton.onclick = function() {
-            AddTextToTextArea(textarea, italicsButtonStatus ? '</i>' : '<i>');
-            italicsButtonStatus = !italicsButtonStatus;
-            italicsButton.innerHTML = italicsButtonStatus ? '/i' : 'i';
-        };
+    const preButton = document.createElement('button');
+    let preButtonStatus = false;
+    preButton.id = 'preButton';
+    preButton.type = 'button';
+    preButton.innerHTML = 'pre';
+    preButton.onclick = function() {
+        AddTextToTextArea(textarea, preButtonStatus ? '</pre>' : '<pre>');
+        preButtonStatus = !preButtonStatus;
+        preButton.innerHTML = preButtonStatus ? '/pre' : 'pre';
+    };
 
-        const boldButton = document.createElement('button');
-        let boldButtonStatus = false;
-        boldButton.id = 'boldButton';
-        boldButton.type = 'button';
-        boldButton.innerHTML = 'b';
-        boldButton.onclick = function() {
-            AddTextToTextArea(textarea, boldButtonStatus ? '</b>' : '<b>');
-            boldButtonStatus = !boldButtonStatus;
-            boldButton.innerHTML = boldButtonStatus ? '/b' : 'b';
-        };
+    const spoilerButton = document.createElement('button');
+    let spoilerButtonStatus = false;
+    spoilerButton.id = 'spoilerButton';
+    spoilerButton.type = 'button';
+    spoilerButton.innerHTML = 'spoiler';
+    spoilerButton.onclick = function() {
+        AddTextToTextArea(textarea, spoilerButtonStatus ? '</spoiler>' : '<spoiler>');
+        spoilerButtonStatus = !spoilerButtonStatus;
+        spoilerButton.innerHTML = spoilerButtonStatus ? '/spoiler' : 'spoiler';
+    };
 
-        const underlineButton = document.createElement('button');
-        let underlineButtonStatus = false;
-        underlineButton.id = 'underlineButton';
-        underlineButton.type = 'button';
-        underlineButton.innerHTML = 'u';
-        underlineButton.onclick = function() {
-            AddTextToTextArea(textarea, underlineButtonStatus ? '</u>' : '<u>');
-            underlineButtonStatus = !underlineButtonStatus;
-            underlineButton.innerHTML = underlineButtonStatus ? '/u' : 'u';
-        };
-
-        const preButton = document.createElement('button');
-        let preButtonStatus = false;
-        preButton.id = 'preButton';
-        preButton.type = 'button';
-        preButton.innerHTML = 'pre';
-        preButton.onclick = function() {
-            AddTextToTextArea(textarea, preButtonStatus ? '</pre>' : '<pre>');
-            preButtonStatus = !preButtonStatus;
-            preButton.innerHTML = preButtonStatus ? '/pre' : 'pre';
-        };
-
-        const spoilerButton = document.createElement('button');
-        let spoilerButtonStatus = false;
-        spoilerButton.id = 'spoilerButton';
-        spoilerButton.type = 'button';
-        spoilerButton.innerHTML = 'spoiler';
-        spoilerButton.onclick = function() {
-            AddTextToTextArea(textarea, spoilerButtonStatus ? '</spoiler>' : '<spoiler>');
-            spoilerButtonStatus = !spoilerButtonStatus;
-            spoilerButton.innerHTML = spoilerButtonStatus ? '/spoiler' : 'spoiler';
-        };
-
-        quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
-        quickpostBody.insertBefore(preButton, quickpostBody.firstChild);
-        quickpostBody.insertBefore(underlineButton, quickpostBody.firstChild);
-        quickpostBody.insertBefore(boldButton, quickpostBody.firstChild);
-        quickpostBody.insertBefore(italicsButton, quickpostBody.firstChild);
-    });
+    quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
+    quickpostBody.insertBefore(preButton, quickpostBody.firstChild);
+    quickpostBody.insertBefore(underlineButton, quickpostBody.firstChild);
+    quickpostBody.insertBefore(boldButton, quickpostBody.firstChild);
+    quickpostBody.insertBefore(italicsButton, quickpostBody.firstChild);
 }
 
 function AddQuoteStyle() {
-    const getting = browser.storage.local.get('quotestyle');
-    getting.then(function (result) {
-        const quotestyle = result.quotestyle;
+    const color = GetBackgroundColor();
 
-        if (quotestyle === false) return;
+    // I should abstract this into the Styles.css file but I'm just not
+    const styletag = document.createElement('style');
+    styletag.textContent = `.quoted-message {
+                                border: ${color.toString()} 2px solid;
+                                margin: 0 30px 2px 30px;
+                                border-radius: 5px;
+                                padding-left: 3px;
+                            }
 
-        const color = GetBackgroundColor();
-
-        // I should abstract this into the Styles.css file but I'm just not
-        const styletag = document.createElement('style');
-        styletag.textContent = `.quoted-message {
-                                    border: ${color.toString()} 2px solid;
-                                    margin: 0 30px 2px 30px;
-                                    border-radius: 5px;
-                                    padding-left: 3px;
-                                }
-
-                                .quoted-message .message-top {
-                                    background-color: ${color.toString()};
-                                    margin-top: -2px !important;
-                                    margin-left: -3px !important;
-                                    border-radius: 3px 3px 0 0;
-                                }`;
-        document.body.appendChild(styletag);
-    });
+                            .quoted-message .message-top {
+                                background-color: ${color.toString()};
+                                margin-top: -2px !important;
+                                margin-left: -3px !important;
+                                border-radius: 3px 3px 0 0;
+                            }`;
+    document.body.appendChild(styletag);
 }
 
-function AddTCIndicator() {
-    const getting = browser.storage.local.get('tcindicator');
-    getting.then(function (result) {
-        const tcindicator = result.tcindicator;
+function AddTCIndicator(post) {
+    // Too difficult to get the TC if not on the first page
+    if (GetPageNumber() !== 1) return;
 
-        if (tcindicator === false) return;
+    const tcName = GetUsernameFromPost(document.querySelector('.message-container'));
 
-        // Too difficult to get the TC if not on the first page
-        if (GetPageNumber() !== 1) return;
-
-        const tcName = GetUsernameFromPost(document.querySelector('.message-container'));
-
-        document.querySelectorAll('.message-container').forEach(function (post) {
-            if (tcName === GetUsernameFromPost(post)) {
-                const tcTag = document.createTextNode(` | TC`);
-                post.querySelector('.message-top').appendChild(tcTag);
-            }
-        });
-    });
+    if (tcName === GetUsernameFromPost(post)) {
+        const tcTag = document.createTextNode(` | TC`);
+        post.querySelector('.message-top').appendChild(tcTag);
+    }
 }
 
 function BlockBlacklistedUsers(post, blacklist) {
     if (blacklist.includes(GetUsernameFromPost(post))) {
         post.style = 'display: none;';
     }
-}
-
-function MonitorNewPosts() {
-    const postObserver = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === "childList") {
-                ProcessNewPosts();
-            }
-        });
-    });
-    postObserver.observe(document.querySelector('.message-container').parentNode, { childList: true });
 }

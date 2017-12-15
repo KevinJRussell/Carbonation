@@ -1,7 +1,6 @@
 let BatchUpLLoder = new function()
 {
     let abort = true;
-    //var imageBox = null;
     let uploadRequests = [];
 
     this.uploadFiles = function(e)

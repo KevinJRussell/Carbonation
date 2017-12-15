@@ -16,8 +16,6 @@ function AddMessageHistoryButton() {
         messageHistoryButton.id = 'messageHistory';
         messageHistoryButton.innerHTML = 'Message History';
 
-        console.log(menubar);
-        console.log(bookmarks);
         if (bookmarks === null) return;
 
         bookmarks.insertBefore(document.createTextNode(' | '), bookmarks.firstChild);
