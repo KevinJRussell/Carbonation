@@ -6,7 +6,8 @@ function saveOptions() {
         quickpoststyletags: document.querySelector('#quickpoststyletags').checked,
         postnumbers: document.querySelector('#postnumbers').checked,
         quotestyle: document.querySelector('#quotestyle').checked,
-        tcindicator: document.querySelector('#tcindicator').checked
+        tcindicator: document.querySelector('#tcindicator').checked,
+        usernotes: document.querySelector('#usernotes').checked
     });
 }
 
@@ -19,6 +20,7 @@ function restoreOptions() {
         document.querySelector('#quickpoststyletags').checked = result.quickpoststyletags;
         document.querySelector('#quotestyle').checked = result.quotestyle;
         document.querySelector('#tcindicator').checked = result.tcindicator;
+        document.querySelector('#usernotes').checked = result.usernotes;
     }
 
     function onError(error) {
@@ -32,7 +34,8 @@ function restoreOptions() {
         postnumbers: false,
         quickpoststyletags: false,
         quotestyle: false,
-        tcindicator: false
+        tcindicator: false,
+        usernotes: false
     });
     getting.then(setCurrentChoice, onError);
 }

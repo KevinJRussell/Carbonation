@@ -36,6 +36,9 @@ function ProcessNewPosts() {
     const newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
 
     newMessages.forEach((post) => {
+        if (settings.usernotes)
+            AddUserNotes(post);
+
         if (settings.postnumbers)
             AddPostNumber(post, messages);
 
@@ -195,6 +198,29 @@ function AddTCIndicator(post) {
         const tcTag = document.createTextNode(` | TC`);
         post.querySelector('.message-top').appendChild(tcTag);
     }
+}
+
+function AddUserNotes(post) {
+    const notesButton = document.createElement('a');
+    notesButton.innerHTML = 'Notes';
+    notesButton.onclick = () => ToggleUserNoteArea(post);
+
+    post.querySelector('.message-top').appendChild(document.createTextNode(' | '));
+    post.querySelector('.message-top').appendChild(notesButton);
+}
+
+function ToggleUserNoteArea(post) {
+    if (post.querySelector('.message-top usernotes-area')) {
+
+    }
+
+    const usernotesArea = document.createElement('textarea');
+    usernotesArea.id = 'usernotesArea';
+    usernotesArea.classList.add('usernotes-area');
+    usernotesArea.style = 'width: 100%; opacity: 0.6;';
+
+    post.querySelector('.message-top').appendChild(document.createElement('br'));
+    post.querySelector('.message-top').appendChild(usernotesArea);
 }
 
 function BlockBlacklistedUsers(post, blacklist) {

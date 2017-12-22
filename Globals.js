@@ -1,7 +1,9 @@
+// Constant fields:
 const POSTS_PER_PAGE = 50;
 
 AddMessageHistoryButton();
 
+// Global page mods:
 function AddMessageHistoryButton() {
     const getting = browser.storage.local.get('messagehistory');
     getting.then(function (result) {

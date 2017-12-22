@@ -59,6 +59,14 @@ function GetUserId() {
     return GetParameter(url.split('?')[1], 'user');
 }
 
+function GetUserIdFromPost(post) {
+    const url = post.querySelector('.message-top').querySelector('a').getAttribute('href');
+
+    return GetParameter(url.split('?')[1], 'user');
+}
+
+//GetUserIdFromPost = (post) => GetParameter(post.querySelector('.message-top').querySelector('a').getAttribute('href').split('?')[1], 'user');
+
 function GetUsernameFromPost(post) {
     return post.querySelector('.message-top').querySelector('a').innerHTML;
 }
