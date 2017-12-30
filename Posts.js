@@ -36,7 +36,7 @@ function ProcessNewPosts() {
     const newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
 
     newMessages.forEach((post) => {
-        if (settings.usernotes)
+        if (settings.usernotebutton)
             AddUserNotes(post);
 
         if (settings.postnumbers)
@@ -210,17 +210,30 @@ function AddUserNotes(post) {
 }
 
 function ToggleUserNoteArea(post) {
-    if (post.querySelector('.message-top usernotes-area')) {
+    const userId = GetUserIdFromPost(post);
+    const notes = post.querySelector('.message-top .usernotes-area');
 
+    if (notes) {
+        SaveUserNotes(notes.value, userId);
+
+        notes.remove();
+    } else {
+        const usernotesArea = document.createElement('textarea');
+        usernotesArea.id = 'usernotes-area';
+        usernotesArea.classList.add('usernotes-area');
+        usernotesArea.style = 'width: 100%; opacity: 0.6;';
+        usernotesArea.value = settings.usernotes.get(userId) === undefined ? '' : settings.usernotes.get(userId);
+
+        post.querySelector('.message-top').appendChild(usernotesArea);
     }
+}
 
-    const usernotesArea = document.createElement('textarea');
-    usernotesArea.id = 'usernotesArea';
-    usernotesArea.classList.add('usernotes-area');
-    usernotesArea.style = 'width: 100%; opacity: 0.6;';
+function SaveUserNotes(notes, userId) {
+    settings.usernotes.set(userId, notes);
 
-    post.querySelector('.message-top').appendChild(document.createElement('br'));
-    post.querySelector('.message-top').appendChild(usernotesArea);
+    browser.storage.local.set({
+        usernotes: settings.usernotes
+    });
 }
 
 function BlockBlacklistedUsers(post, blacklist) {

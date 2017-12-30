@@ -7,7 +7,7 @@ function saveOptions() {
         postnumbers: document.querySelector('#postnumbers').checked,
         quotestyle: document.querySelector('#quotestyle').checked,
         tcindicator: document.querySelector('#tcindicator').checked,
-        usernotes: document.querySelector('#usernotes').checked
+        usernotebutton: document.querySelector('#usernotebutton').checked
     });
 }
 
@@ -20,7 +20,7 @@ function restoreOptions() {
         document.querySelector('#quickpoststyletags').checked = result.quickpoststyletags;
         document.querySelector('#quotestyle').checked = result.quotestyle;
         document.querySelector('#tcindicator').checked = result.tcindicator;
-        document.querySelector('#usernotes').checked = result.usernotes;
+        document.querySelector('#usernotebutton').checked = result.usernotebutton;
     }
 
     function onError(error) {
@@ -35,7 +35,7 @@ function restoreOptions() {
         quickpoststyletags: false,
         quotestyle: false,
         tcindicator: false,
-        usernotes: false
+        usernotebutton: false
     });
     getting.then(setCurrentChoice, onError);
 }
