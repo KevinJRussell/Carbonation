@@ -7,9 +7,11 @@ Features:
 *Blacklist (comes prepopulated with Xeinok)
 *'Filter Me' button
 *Jump To Last Page button
+*Message History option added to top bar
 *Post Numbers
 *Quick Post style buttons
 *TC Indicator
+*User Notes
 
 Features I'd like to add:
 -Archive Quotes
