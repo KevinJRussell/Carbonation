@@ -9,7 +9,11 @@ function GetSettings() {
 
     getSettings.then(function (result) {
         settings = result;
+
+        // Allow for both comma delimited and comma-space delimited lists
         blacklist = result.blacklist.split(',').map((user) => user.trim());
+        // In case it happens to be the first time the extension has been run since User Notes were added
+        if (settings.usernotes === undefined) settings.usernotes = new Map();
 
         ProcessPage();
 
@@ -109,55 +113,55 @@ function AddQuickPostStyleTags() {
     let italicsButtonStatus = false;
     italicsButton.id = 'italicsButton';
     italicsButton.type = 'button';
-    italicsButton.innerHTML = 'i';
+    italicsButton.innerText = 'i';
     italicsButton.onclick = function() {
         AddTextToTextArea(textarea, italicsButtonStatus ? '</i>' : '<i>');
         italicsButtonStatus = !italicsButtonStatus;
-        italicsButton.innerHTML = italicsButtonStatus ? '/i' : 'i';
+        italicsButton.innerText = italicsButtonStatus ? '/i' : 'i';
     };
 
     const boldButton = document.createElement('button');
     let boldButtonStatus = false;
     boldButton.id = 'boldButton';
     boldButton.type = 'button';
-    boldButton.innerHTML = 'b';
+    boldButton.innerText = 'b';
     boldButton.onclick = function() {
         AddTextToTextArea(textarea, boldButtonStatus ? '</b>' : '<b>');
         boldButtonStatus = !boldButtonStatus;
-        boldButton.innerHTML = boldButtonStatus ? '/b' : 'b';
+        boldButton.innerText = boldButtonStatus ? '/b' : 'b';
     };
 
     const underlineButton = document.createElement('button');
     let underlineButtonStatus = false;
     underlineButton.id = 'underlineButton';
     underlineButton.type = 'button';
-    underlineButton.innerHTML = 'u';
+    underlineButton.innerText = 'u';
     underlineButton.onclick = function() {
         AddTextToTextArea(textarea, underlineButtonStatus ? '</u>' : '<u>');
         underlineButtonStatus = !underlineButtonStatus;
-        underlineButton.innerHTML = underlineButtonStatus ? '/u' : 'u';
+        underlineButton.innerText = underlineButtonStatus ? '/u' : 'u';
     };
 
     const preButton = document.createElement('button');
     let preButtonStatus = false;
     preButton.id = 'preButton';
     preButton.type = 'button';
-    preButton.innerHTML = 'pre';
+    preButton.innerText = 'pre';
     preButton.onclick = function() {
         AddTextToTextArea(textarea, preButtonStatus ? '</pre>' : '<pre>');
         preButtonStatus = !preButtonStatus;
-        preButton.innerHTML = preButtonStatus ? '/pre' : 'pre';
+        preButton.innerText = preButtonStatus ? '/pre' : 'pre';
     };
 
     const spoilerButton = document.createElement('button');
     let spoilerButtonStatus = false;
     spoilerButton.id = 'spoilerButton';
     spoilerButton.type = 'button';
-    spoilerButton.innerHTML = 'spoiler';
+    spoilerButton.innerText = 'spoiler';
     spoilerButton.onclick = function() {
         AddTextToTextArea(textarea, spoilerButtonStatus ? '</spoiler>' : '<spoiler>');
         spoilerButtonStatus = !spoilerButtonStatus;
-        spoilerButton.innerHTML = spoilerButtonStatus ? '/spoiler' : 'spoiler';
+        spoilerButton.innerText = spoilerButtonStatus ? '/spoiler' : 'spoiler';
     };
 
     quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
