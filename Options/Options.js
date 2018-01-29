@@ -1,3 +1,8 @@
+document.addEventListener('DOMContentLoaded', restoreOptions);
+document.querySelectorAll('input').forEach((input) => input.addEventListener('change', saveOptions));
+
+AddEraseButton();
+
 function saveOptions() {
     browser.storage.local.set({
         blacklist: document.querySelector('#blacklist').value,
@@ -29,16 +34,27 @@ function restoreOptions() {
 
     let getting = browser.storage.local.get({
         blacklist: '',
-        filterme: false,
-        messagehistory: false,
-        postnumbers: false,
-        quickpoststyletags: false,
-        quotestyle: false,
-        tcindicator: false,
-        usernotebutton: false
+        filterme: true,
+        messagehistory: true,
+        postnumbers: true,
+        quickpoststyletags: true,
+        quotestyle: true,
+        tcindicator: true,
+        usernotebutton: true
     });
     getting.then(setCurrentChoice, onError);
 }
 
-document.addEventListener('DOMContentLoaded', restoreOptions);
-document.querySelectorAll('input').forEach((input) => input.addEventListener('change', saveOptions));
+function AddEraseButton() {
+  document.querySelector('#erasenotesbutton').onclick = () => EraseUserNotes();
+}
+
+function EraseUserNotes() {
+  var result = confirm("Are you sure you want to delete all user notes?");
+
+  if (result == true) {
+    browser.storage.local.set({
+      usernotes: [ ]
+    });
+  }
+}

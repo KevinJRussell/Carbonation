@@ -9,7 +9,7 @@ function AddMessageHistoryButton() {
     getting.then(function (result) {
         const history = result.messagehistory;
 
-        if (history === false) return;
+        if (history !== true) return;
 
         const menubar = document.querySelector('.menubar');
         const bookmarks = menubar.querySelector('#bookmarks');

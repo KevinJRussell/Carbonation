@@ -1,5 +1,6 @@
 let settings;
 let blacklist;
+var usernotes;
 
 GetSettings();
 
@@ -10,10 +11,7 @@ function GetSettings() {
     getSettings.then(function (result) {
         settings = result;
 
-        // Allow for both comma delimited and comma-space delimited lists
-        blacklist = result.blacklist.split(',').map((user) => user.trim());
-        // In case it happens to be the first time the extension has been run since User Notes were added
-        if (settings.usernotes === undefined) settings.usernotes = new Map();
+        PrepareUserData();
 
         ProcessPage();
 
@@ -21,6 +19,13 @@ function GetSettings() {
 
         MonitorNewPosts();
     });
+}
+
+function PrepareUserData() {
+    // Allow for both comma delimited and comma-space delimited lists
+    blacklist = settings.blacklist.split(',').map((user) => user.trim());
+
+    usernotes = new Map(settings.usernotes);
 }
 
 function ProcessPage() {
@@ -41,7 +46,7 @@ function ProcessNewPosts() {
 
     newMessages.forEach((post) => {
         if (settings.usernotebutton)
-            AddUserNotes(post);
+            AddUserNoteButton(post);
 
         if (settings.postnumbers)
             AddPostNumber(post, messages);
@@ -69,27 +74,19 @@ function MonitorNewPosts() {
 
 // Page mods:
 function AddFilterMeButton() {
-    const getSetting = browser.storage.local.get('filterme');
+      const userId = GetUserId();
+      const url = GetUrlTopic() + '&u=' + userId;
+      const infobar = document.querySelector('.infobar');
+      const filterMeButton = document.createElement('a');
+      filterMeButton.href = url;
+      filterMeButton.id = 'filterMe';
+      filterMeButton.innerHTML = 'Filter Me';
+      filterMeButton.style = 'text-decoration: none;';
 
-    getSetting.then(function (result) {
-        const filterEnabled = result.filterme;
+      if (infobar === null) return;
 
-        if (filterEnabled === false) return;
-
-        const userId = GetUserId();
-        const url = GetUrlTopic() + '&u=' + userId;
-        const infobar = document.querySelector('.infobar');
-        const filterMeButton = document.createElement('a');
-        filterMeButton.href = url;
-        filterMeButton.id = 'filterMe';
-        filterMeButton.innerHTML = 'Filter Me';
-        filterMeButton.style = 'text-decoration: none;';
-
-        if (infobar === null) return;
-
-        infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
-        infobar.insertBefore(filterMeButton, infobar.firstChild);
-    });
+      infobar.insertBefore(document.createTextNode(' | '), infobar.firstChild);
+      infobar.insertBefore(filterMeButton, infobar.firstChild);
 }
 
 function AddPostNumber(post, messages) {
@@ -204,7 +201,7 @@ function AddTCIndicator(post) {
     }
 }
 
-function AddUserNotes(post) {
+function AddUserNoteButton(post) {
     const notesButton = document.createElement('a');
     notesButton.innerHTML = 'Notes';
     notesButton.onclick = () => ToggleUserNoteArea(post);
@@ -215,28 +212,32 @@ function AddUserNotes(post) {
 
 function ToggleUserNoteArea(post) {
     const userId = GetUserIdFromPost(post);
-    const notes = post.querySelector('.message-top .usernotes-area');
+    const notesArea = post.querySelector('.message-top .usernotes-area');
 
-    if (notes) {
-        SaveUserNotes(notes.value, userId);
+    if (userId === null) return; // Prevents notes in Anonymous topics, which would apply to every Human ever
 
-        notes.remove();
+    if (notesArea) {
+        SaveUserNotes(notesArea.value, userId);
+
+        notesArea.remove();
     } else {
         const usernotesArea = document.createElement('textarea');
         usernotesArea.id = 'usernotes-area';
         usernotesArea.classList.add('usernotes-area');
         usernotesArea.style = 'width: 100%; opacity: 0.6;';
-        usernotesArea.value = settings.usernotes.get(userId) === undefined ? '' : settings.usernotes.get(userId);
+        usernotesArea.value = usernotes.get(userId) === undefined ? '' : usernotes.get(userId);
 
         post.querySelector('.message-top').appendChild(usernotesArea);
     }
 }
 
 function SaveUserNotes(notes, userId) {
-    settings.usernotes.set(userId, notes);
+    if (notes === '') return;
+
+    usernotes.set(userId, notes);
 
     browser.storage.local.set({
-        usernotes: settings.usernotes
+        usernotes: [...usernotes]
     });
 }
 
