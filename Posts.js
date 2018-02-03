@@ -1,6 +1,7 @@
 let settings;
 let blacklist;
-var usernotes;
+let pageNumber;
+let usernotes;
 
 GetSettings();
 
@@ -15,7 +16,7 @@ function GetSettings() {
 
         ProcessPage();
 
-        ProcessNewPosts();
+        ProcessPosts();
 
         MonitorNewPosts();
     });
@@ -24,7 +25,7 @@ function GetSettings() {
 function PrepareUserData() {
     // Allow for both comma delimited and comma-space delimited lists
     blacklist = settings.blacklist.split(',').map((user) => user.trim());
-
+    pageNumber = GetPageNumber();
     usernotes = new Map(settings.usernotes);
 }
 
@@ -39,7 +40,7 @@ function ProcessPage() {
         AddQuoteStyle();
 }
 
-function ProcessNewPosts() {
+function ProcessPosts() {
     // Array.from needed because NodeList doesn't implement indexOf
     const messages = Array.from(document.querySelectorAll('.message-container'));
     const newMessages = messages.filter((m) => !m.classList.contains('carbonation-processed'));
@@ -48,10 +49,12 @@ function ProcessNewPosts() {
         if (settings.usernotebutton)
             AddUserNoteButton(post);
 
-        if (settings.postnumbers)
-            AddPostNumber(post, messages);
+        // If url parameter u has a value, we are on a filtered post list
+        if (settings.postnumbers && GetUrlParameter('u') === null)
+            AddPostNumber(post, messages.indexOf(post));
 
-        if (settings.tcindicator)
+        // Too difficult to get the TC if not on the first page
+        if (settings.tcindicator && pageNumber === 1)
             AddTCIndicator(post);
 
         if (blacklist)
@@ -65,7 +68,7 @@ function MonitorNewPosts() {
     const postObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.type === "childList") {
-                ProcessNewPosts();
+                ProcessPosts();
             }
         });
     });
@@ -89,17 +92,14 @@ function AddFilterMeButton() {
       infobar.insertBefore(filterMeButton, infobar.firstChild);
 }
 
-function AddPostNumber(post, messages) {
+function AddPostNumber(post, index) {
+    if (index < 0) return;
+
     const pageNumber = GetPageNumber();
     const postFloor = (pageNumber - 1) * POSTS_PER_PAGE;
+    const postNumberNode = document.createTextNode(` | #${(postFloor + index + 1)}`);
 
-    const postIndex = messages.indexOf(post);
-
-    if (postIndex >= 0)
-    {
-        const postNumber = document.createTextNode(` | #${(postFloor + postIndex + 1)}`);
-        post.querySelector('.message-top').appendChild(postNumber);
-    }
+    post.querySelector('.message-top').appendChild(postNumberNode);
 }
 
 function AddQuickPostStyleTags() {
@@ -190,10 +190,9 @@ function AddQuoteStyle() {
 }
 
 function AddTCIndicator(post) {
-    // Too difficult to get the TC if not on the first page
-    if (GetPageNumber() !== 1) return;
-
     const tcName = GetUsernameFromPost(document.querySelector('.message-container'));
+
+    if (tcName === null) return; // Probably an Anonymous topic
 
     if (tcName === GetUsernameFromPost(post)) {
         const tcTag = document.createTextNode(` | TC`);

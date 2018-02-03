@@ -29,7 +29,7 @@ function restoreOptions() {
     }
 
     function onError(error) {
-        console.log(`Error: ${error}`);
+        console.log(`Options Error: ${error}`);
     }
 
     let getting = browser.storage.local.get({

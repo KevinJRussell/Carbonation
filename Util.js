@@ -60,13 +60,12 @@ function GetUserId() {
 }
 
 function GetUserIdFromPost(post) {
-    const url = post.querySelector('.message-top').querySelector('a').getAttribute('href');
+    const url = post.querySelector('.message-top a').getAttribute('href');
 
     return GetParameter(url.split('?')[1], 'user');
 }
 
-//GetUserIdFromPost = (post) => GetParameter(post.querySelector('.message-top').querySelector('a').getAttribute('href').split('?')[1], 'user');
-
 function GetUsernameFromPost(post) {
-    return post.querySelector('.message-top').querySelector('a').innerHTML;
+    const username = post.querySelector('.message-top a').innerHTML;
+    return username === 'Filter' ? null : username;
 }
