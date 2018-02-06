@@ -14,6 +14,17 @@ function AddTextToTextArea(ta, text) {
     }
 }
 
+function CreateStyleTagButton(textarea, buttonName, buttonType) {
+  const newButton = document.createElement('button');
+  newButton.id = `${buttonName}Button`;
+  newButton.type = 'button';
+  newButton.innerText = buttonType;
+  newButton.onclick = function() {
+    AddTextToTextArea(textarea, newButton.innerText.startsWith('/') ? `</${buttonType}>` : `<${buttonType}>`);
+    newButton.innerText = newButton.innerText.startsWith('/') ? `/${buttonType}` : `${buttonType}`;
+  };
+}
+
 function GetBackgroundColor() {
     return window.getComputedStyle(document.querySelector('.message-top'), null).backgroundColor;
 }

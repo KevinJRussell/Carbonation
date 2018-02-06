@@ -106,60 +106,12 @@ function AddQuickPostStyleTags() {
     const quickpostBody = document.querySelector('.quickpost-body');
     const textarea = quickpostBody.querySelector('textarea');
 
-    const italicsButton = document.createElement('button');
-    let italicsButtonStatus = false;
-    italicsButton.id = 'italicsButton';
-    italicsButton.type = 'button';
-    italicsButton.innerText = 'i';
-    italicsButton.onclick = function() {
-        AddTextToTextArea(textarea, italicsButtonStatus ? '</i>' : '<i>');
-        italicsButtonStatus = !italicsButtonStatus;
-        italicsButton.innerText = italicsButtonStatus ? '/i' : 'i';
-    };
-
-    const boldButton = document.createElement('button');
-    let boldButtonStatus = false;
-    boldButton.id = 'boldButton';
-    boldButton.type = 'button';
-    boldButton.innerText = 'b';
-    boldButton.onclick = function() {
-        AddTextToTextArea(textarea, boldButtonStatus ? '</b>' : '<b>');
-        boldButtonStatus = !boldButtonStatus;
-        boldButton.innerText = boldButtonStatus ? '/b' : 'b';
-    };
-
-    const underlineButton = document.createElement('button');
-    let underlineButtonStatus = false;
-    underlineButton.id = 'underlineButton';
-    underlineButton.type = 'button';
-    underlineButton.innerText = 'u';
-    underlineButton.onclick = function() {
-        AddTextToTextArea(textarea, underlineButtonStatus ? '</u>' : '<u>');
-        underlineButtonStatus = !underlineButtonStatus;
-        underlineButton.innerText = underlineButtonStatus ? '/u' : 'u';
-    };
-
-    const preButton = document.createElement('button');
-    let preButtonStatus = false;
-    preButton.id = 'preButton';
-    preButton.type = 'button';
-    preButton.innerText = 'pre';
-    preButton.onclick = function() {
-        AddTextToTextArea(textarea, preButtonStatus ? '</pre>' : '<pre>');
-        preButtonStatus = !preButtonStatus;
-        preButton.innerText = preButtonStatus ? '/pre' : 'pre';
-    };
-
-    const spoilerButton = document.createElement('button');
-    let spoilerButtonStatus = false;
-    spoilerButton.id = 'spoilerButton';
-    spoilerButton.type = 'button';
-    spoilerButton.innerText = 'spoiler';
-    spoilerButton.onclick = function() {
-        AddTextToTextArea(textarea, spoilerButtonStatus ? '</spoiler>' : '<spoiler>');
-        spoilerButtonStatus = !spoilerButtonStatus;
-        spoilerButton.innerText = spoilerButtonStatus ? '/spoiler' : 'spoiler';
-    };
+    const italicsButton = CreateStyleTagButton(textarea, 'italics', 'i');
+    const boldButton = CreateStyleTagButton(textarea, 'bold', 'b');
+    const underlineButton = CreateStyleTagButton(textarea, 'underline', 'u');
+    const preButton = CreateStyleTagButton(textarea, 'pre', 'pre');
+    const spoilerButton = CreateStyleTagButton(textarea, 'spoiler', 'spoiler');
+    const imgButton = CreateStyleTagButton(textarea, 'img', 'img');
 
     quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
     quickpostBody.insertBefore(preButton, quickpostBody.firstChild);
