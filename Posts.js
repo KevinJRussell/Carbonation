@@ -33,8 +33,8 @@ function ProcessPage() {
     if (settings.filterme)
         AddFilterMeButton();
 
-    if (settings.quickpoststyletags)
-        AddQuickPostStyleTags();
+    if (settings.styletags)
+        AddStyleTags();
 
     if (settings.quotestyle)
         AddQuoteStyle();
@@ -102,7 +102,7 @@ function AddPostNumber(post, index) {
     post.querySelector('.message-top').appendChild(postNumberNode);
 }
 
-function AddQuickPostStyleTags() {
+function AddStyleTags() {
     const quickpostBody = document.querySelector('.quickpost-body');
     const textarea = quickpostBody.querySelector('textarea');
 

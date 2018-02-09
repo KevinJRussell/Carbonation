@@ -8,7 +8,7 @@ function saveOptions() {
         blacklist: document.querySelector('#blacklist').value,
         filterme: document.querySelector('#filterme').checked,
         messagehistory: document.querySelector('#messagehistory').checked,
-        quickpoststyletags: document.querySelector('#quickpoststyletags').checked,
+        styletags: document.querySelector('#styletags').checked,
         postnumbers: document.querySelector('#postnumbers').checked,
         quotestyle: document.querySelector('#quotestyle').checked,
         tcindicator: document.querySelector('#tcindicator').checked,
@@ -22,10 +22,12 @@ function restoreOptions() {
         document.querySelector('#filterme').checked = result.filterme;
         document.querySelector('#messagehistory').checked = result.messagehistory;
         document.querySelector('#postnumbers').checked = result.postnumbers;
-        document.querySelector('#quickpoststyletags').checked = result.quickpoststyletags;
+        document.querySelector('#styletags').checked = result.styletags;
         document.querySelector('#quotestyle').checked = result.quotestyle;
         document.querySelector('#tcindicator').checked = result.tcindicator;
         document.querySelector('#usernotebutton').checked = result.usernotebutton;
+
+        saveOptions();
     }
 
     function onError(error) {
@@ -37,7 +39,7 @@ function restoreOptions() {
         filterme: true,
         messagehistory: true,
         postnumbers: true,
-        quickpoststyletags: true,
+        styletags: true,
         quotestyle: true,
         tcindicator: true,
         usernotebutton: true

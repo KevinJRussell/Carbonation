@@ -15,14 +15,17 @@ function AddTextToTextArea(ta, text) {
 }
 
 function CreateStyleTagButton(textarea, buttonName, buttonType) {
-  const newButton = document.createElement('button');
-  newButton.id = `${buttonName}Button`;
-  newButton.type = 'button';
-  newButton.innerText = buttonType;
-  newButton.onclick = function() {
-    AddTextToTextArea(textarea, newButton.innerText.startsWith('/') ? `</${buttonType}>` : `<${buttonType}>`);
-    newButton.innerText = newButton.innerText.startsWith('/') ? `/${buttonType}` : `${buttonType}`;
-  };
+    const newButton = document.createElement('button');
+    newButton.id = `${buttonName}Button`;
+    newButton.type = 'button';
+    newButton.innerText = buttonType;
+    newButton.onclick = function() {
+      AddTextToTextArea(textarea, newButton.innerText.startsWith('/') ? `</${buttonType}>` : `<${buttonType}>`);
+      console.log(newButton.innerText.startsWith('/'));
+      newButton.innerText = newButton.innerText.startsWith('/') ? `${buttonType}` : `/${buttonType}`;
+    };
+
+    return newButton;
 }
 
 function GetBackgroundColor() {

@@ -39,6 +39,10 @@
     {
       "matches": ["*://*.endoftheinter.net/showmessages.php*"],
       "js": ["Posts.js"]
+    },
+    {
+      "matches": ["*://*.endoftheinter.net/postmsg.php*"],
+      "js": ["PostMessage.js"]
     }
   ]
 }
