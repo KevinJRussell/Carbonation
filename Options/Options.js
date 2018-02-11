@@ -9,6 +9,7 @@ function saveOptions() {
         filterme: document.querySelector('#filterme').checked,
         messagehistory: document.querySelector('#messagehistory').checked,
         styletags: document.querySelector('#styletags').checked,
+        styletaglocation: document.querySelector('#styletaglocation').checked,
         postnumbers: document.querySelector('#postnumbers').checked,
         quotestyle: document.querySelector('#quotestyle').checked,
         tcindicator: document.querySelector('#tcindicator').checked,
@@ -23,6 +24,7 @@ function restoreOptions() {
         document.querySelector('#messagehistory').checked = result.messagehistory;
         document.querySelector('#postnumbers').checked = result.postnumbers;
         document.querySelector('#styletags').checked = result.styletags;
+        document.querySelector('#styletaglocation').checked = result.styletaglocation;
         document.querySelector('#quotestyle').checked = result.quotestyle;
         document.querySelector('#tcindicator').checked = result.tcindicator;
         document.querySelector('#usernotebutton').checked = result.usernotebutton;
@@ -40,6 +42,7 @@ function restoreOptions() {
         messagehistory: true,
         postnumbers: true,
         styletags: true,
+        styletaglocation: true,
         quotestyle: true,
         tcindicator: true,
         usernotebutton: true

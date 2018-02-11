@@ -1,22 +1,24 @@
 let styletags;
+let styletaglocation;
 
 GetSettings();
 
 function GetSettings() {
-    const getSettings = browser.storage.local.get('styletags');
+    const getSettings = browser.storage.local.get();
 
     getSettings.then(function (result) {
         styletags = result.styletags;
-        console.log(styletags);
+        styletaglocation = result.styletaglocation;
 
         if (styletags)
-          AddStyleTags()
+          AddStyleTags();
     });
 }
 
 function AddStyleTags() {
     const parentForm = document.querySelector('form');
     const textarea = document.querySelector('#message');
+    const bottomButtons = document.querySelector('#buttons');
 
     const italicsButton = CreateStyleTagButton(textarea, 'italics', 'i');
     const boldButton = CreateStyleTagButton(textarea, 'bold', 'b');
@@ -25,10 +27,10 @@ function AddStyleTags() {
     const spoilerButton = CreateStyleTagButton(textarea, 'spoiler', 'spoiler');
     const imgButton = CreateStyleTagButton(textarea, 'img', 'img');
 
-    parentForm.insertBefore(italicsButton, textarea);
-    parentForm.insertBefore(boldButton, textarea);
-    parentForm.insertBefore(underlineButton, textarea);
-    parentForm.insertBefore(preButton, textarea);
-    parentForm.insertBefore(spoilerButton, textarea);
-    parentForm.insertBefore(document.createElement('br'), textarea);
+    parentForm.insertBefore(italicsButton, styletaglocation ? textarea : bottomButtons);
+    parentForm.insertBefore(boldButton, styletaglocation ? textarea : bottomButtons);
+    parentForm.insertBefore(underlineButton, styletaglocation ? textarea : bottomButtons);
+    parentForm.insertBefore(preButton, styletaglocation ? textarea : bottomButtons);
+    parentForm.insertBefore(spoilerButton, styletaglocation ? textarea : bottomButtons);
+    parentForm.insertBefore(document.createElement('br'), styletaglocation ? textarea : bottomButtons);
 }
