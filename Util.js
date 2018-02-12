@@ -19,6 +19,7 @@ function CreateStyleTagButton(textarea, buttonName, buttonType) {
     newButton.id = `${buttonName}Button`;
     newButton.type = 'button';
     newButton.innerText = buttonType;
+    newButton.tabIndex = -1;
     newButton.onclick = function() {
       AddTextToTextArea(textarea, newButton.innerText.startsWith('/') ? `</${buttonType}>` : `<${buttonType}>`);
       console.log(newButton.innerText.startsWith('/'));
