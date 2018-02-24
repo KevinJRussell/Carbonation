@@ -6,12 +6,14 @@ function AddTextToTextArea(ta, text) {
         ta.value = ta.value.substring(0, start)
             + text
             + ta.value.substring(end, ta.value.length);
-        ta.selectionStart = start + text.length;
-        ta.selectionEnd = start + text.length;
     }
     else {
         ta.value += text;
     }
+
+    // Set the cursor at the end of the new style tag
+    ta.focus();
+    ta.setSelectionRange(start + text.length, start + text.length);
 }
 
 function CreateStyleTagButton(textarea, buttonName, buttonType) {
