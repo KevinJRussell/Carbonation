@@ -58,7 +58,7 @@ function ProcessPosts() {
             AddTCIndicator(post);
 
         if (blacklist)
-            BlockBlacklistedUsers(post, blacklist);
+            BlockBlacklistedUsers(post);
 
         post.classList.add('carbonation-processed');
     });
@@ -192,7 +192,7 @@ function SaveUserNotes(notes, userId) {
     });
 }
 
-function BlockBlacklistedUsers(post, blacklist) {
+function BlockBlacklistedUsers(post) {
     if (blacklist.includes(GetUsernameFromPost(post))) {
         post.style = 'display: none;';
     }
