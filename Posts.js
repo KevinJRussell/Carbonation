@@ -110,10 +110,13 @@ function AddStyleTags() {
     const boldButton = CreateStyleTagButton(textarea, 'bold', 'b');
     const underlineButton = CreateStyleTagButton(textarea, 'underline', 'u');
     const preButton = CreateStyleTagButton(textarea, 'pre', 'pre');
-    const spoilerButton = CreateStyleTagButton(textarea, 'spoiler', 'spoiler');
     const imgButton = CreateStyleTagButton(textarea, 'img', 'img');
+    const spoilerButton = CreateStyleTagButton(textarea, 'spoiler', 'spoiler');
+    const quoteButton = CreateStyleTagButton(textarea, 'quote', 'quote');
 
+    quickpostBody.insertBefore(quoteButton, quickpostBody.firstChild);
     quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
+    quickpostBody.insertBefore(imgButton, quickpostBody.firstChild);
     quickpostBody.insertBefore(preButton, quickpostBody.firstChild);
     quickpostBody.insertBefore(underlineButton, quickpostBody.firstChild);
     quickpostBody.insertBefore(boldButton, quickpostBody.firstChild);
