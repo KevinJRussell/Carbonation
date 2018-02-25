@@ -114,8 +114,8 @@ function AddStyleTags() {
     const quoteButton = CreateStyleTagButton(textarea, 'quote', 'quote');
     const spoilerButton = CreateStyleTagButton(textarea, 'spoiler', 'spoiler');
 
-    quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
     quickpostBody.insertBefore(quoteButton, quickpostBody.firstChild);
+    quickpostBody.insertBefore(spoilerButton, quickpostBody.firstChild);
     quickpostBody.insertBefore(imgButton, quickpostBody.firstChild);
     quickpostBody.insertBefore(preButton, quickpostBody.firstChild);
     quickpostBody.insertBefore(underlineButton, quickpostBody.firstChild);
